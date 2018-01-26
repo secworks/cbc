@@ -88,6 +88,11 @@ module tb_cbc();
   parameter ADDR_RESULT2     = 8'h32;
   parameter ADDR_RESULT3     = 8'h33;
 
+  parameter ADDR_IV0         = 8'h40;
+  parameter ADDR_IV1         = 8'h41;
+  parameter ADDR_IV2         = 8'h42;
+  parameter ADDR_IV3         = 8'h43;
+
   parameter AES_128_BIT_KEY = 0;
   parameter AES_256_BIT_KEY = 1;
 
@@ -282,6 +287,21 @@ module tb_cbc();
 
 
   //----------------------------------------------------------------
+  // write_iv()
+  //
+  // Write the given block to the dut.
+  //----------------------------------------------------------------
+  task write_block(input [127 : 0] iv);
+    begin
+      write_word(ADDR_IV0, block[127  :  96]);
+      write_word(ADDR_IV1, block[95   :  64]);
+      write_word(ADDR_IV2, block[63   :  32]);
+      write_word(ADDR_IV3, block[31   :   0]);
+    end
+  endtask // write_iv
+
+
+  //----------------------------------------------------------------
   // read_word()
   //
   // Read a data word from the given address in the DUT.
@@ -374,6 +394,7 @@ module tb_cbc();
                                   input [255 : 0] key,
                                   input           key_length,
                                   input [127 : 0] block,
+                                  input [127 : 0] iv,
                                   input [127 : 0] expected);
     begin
       $display("*** TC %0d CBC mode test started.", tc_number);

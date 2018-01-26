@@ -71,14 +71,14 @@ module cbc(
   localparam ADDR_KEY0        = 8'h10;
   localparam ADDR_KEY7        = 8'h17;
 
-  localparam ADDR_IV0         = 8'h20;
-  localparam ADDR_IV3         = 8'h23;
+  localparam ADDR_BLOCK0      = 8'h20;
+  localparam ADDR_BLOCK3      = 8'h23;
 
-  localparam ADDR_BLOCK0      = 8'h30;
-  localparam ADDR_BLOCK3      = 8'h33;
+  localparam ADDR_RESULT0     = 8'h30;
+  localparam ADDR_RESULT3     = 8'h33;
 
-  localparam ADDR_RESULT0     = 8'h40;
-  localparam ADDR_RESULT3     = 8'h43;
+  localparam ADDR_IV0         = 8'h40;
+  localparam ADDR_IV3         = 8'h43;
 
   localparam CORE_NAME0       = 32'h63626320; // "cbc "
   localparam CORE_NAME1       = 32'h20202020; // "    "
