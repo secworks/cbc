@@ -476,6 +476,15 @@ module tb_cbc();
 
       $display("CBC 128 bit key test");
       $display("--------------------");
+
+      init_key(nist_aes128_key, AES_128_BIT_KEY);
+      write_block(nist_plaintext0);
+      write_iv(nist_iv);
+      dump_dut_state();
+
+//      write_word(ADDR_CONFIG, (8'h00 + (key_length << 1) + AES_ENCIPHER));
+//      write_word(ADDR_CTRL, 8'h02);
+
     end
   endtask // cbc_128_test
 
@@ -518,6 +527,8 @@ module tb_cbc();
       $display("");
       $display("CBC 256 bit key test");
       $display("--------------------");
+
+
     end
   endtask // cbc_256_test
 
