@@ -482,8 +482,13 @@ module tb_cbc();
       write_iv(nist_iv);
       dump_dut_state();
 
-//      write_word(ADDR_CONFIG, (8'h00 + (key_length << 1) + AES_ENCIPHER));
-//      write_word(ADDR_CTRL, 8'h02);
+      write_word(ADDR_CONFIG, (8'h00 + (AES_128_BIT_KEY << 1) + AES_ENCIPHER));
+      write_word(ADDR_CTRL, 8'h02);
+
+      #(100 * CLK_PERIOD);
+
+      dump_dut_state();
+      read_result();
 
     end
   endtask // cbc_128_test

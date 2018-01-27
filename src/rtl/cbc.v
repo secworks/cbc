@@ -267,7 +267,7 @@ module cbc(
 
               if ((address >= ADDR_IV0) && (address <= ADDR_IV3))
                 begin
-                  load_iv = 1'b0;
+                  load_iv = 1'b1;
                   iv_we   = 1'b1;
                 end
 
