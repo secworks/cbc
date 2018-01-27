@@ -4,9 +4,12 @@ CBC block cipher mode of operation for AES as specified in
 implementation use the AES core.
 
 The implementation is a modified version of the AES top level
-wrapper. This version adds API for IV as well as the chaining
+wrapper. This version adds API for IV as well as the CBC chaining
 functionality.
 
 
 ## Implementation status
-Not completed. Does not yet work.
+Implementation done. Core works.
+
+Simulation gives correct results for 128 and 256
+bit keys for all blocks. Need to add results from FPGA builds.
