@@ -1,6 +1,6 @@
 # cbc
 CBC block cipher mode of operation for AES as specified in
-[NIST SP 800-38A]](https://csrc.nist.gov/publications/detail/sp/800-38a/final). This
+[NIST SP 800-38A](https://csrc.nist.gov/publications/detail/sp/800-38a/final). This
 implementation use the AES core.
 
 The implementation is a modified version of the AES top level
