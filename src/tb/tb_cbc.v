@@ -389,43 +389,20 @@ module tb_cbc();
 
 
   //----------------------------------------------------------------
-  // cbc_mode_single_block_test()
-  //
-  // Perform CBC mode encryption or decryption single block test.
+  // check_result()
   //----------------------------------------------------------------
-  task cbc_mode_single_block_test(input [7 : 0]   tc_number,
-                                  input           encdec,
-                                  input [255 : 0] key,
-                                  input           key_length,
-                                  input [127 : 0] block,
-                                  input [127 : 0] iv,
-                                  input [127 : 0] expected);
+  task check_result(input [127 : 0] result, input [127 : 0] expected);
     begin
-      $display("*** TC %0d CBC mode test started.", tc_number);
-      tc_ctr = tc_ctr + 1;
-
-      init_key(key, key_length);
-      write_block(block);
-      write_iv(iv);
-      dump_dut_state();
-
-      write_word(ADDR_CONFIG, (8'h00 + (key_length << 1)+ encdec));
-      write_word(ADDR_CTRL, 8'h02);
-
-      #(100 * CLK_PERIOD);
-
-      read_result();
-
-      if (result_data == expected)
+      if (result == expected)
         begin
-          $display("*** TC %0d successful.", tc_number);
+          $display("*** Correct result received");
           $display("");
         end
       else
         begin
-          $display("*** ERROR: TC %0d NOT successful.", tc_number);
+          $display("*** ERROR: Incorrect result");
           $display("Expected: 0x%032x", expected);
-          $display("Got:      0x%032x", result_data);
+          $display("Got:      0x%032x", result);
           $display("");
 
           error_ctr = error_ctr + 1;
@@ -478,21 +455,45 @@ module tb_cbc();
       $display("--------------------");
 
       init_key(nist_aes128_key, AES_128_BIT_KEY);
+
+      $display("First block.");
+      tc_ctr = tc_ctr + 1;
       write_block(nist_plaintext0);
       write_iv(nist_iv);
-      dump_dut_state();
-
       write_word(ADDR_CONFIG, (8'h00 + (AES_128_BIT_KEY << 1) + AES_ENCIPHER));
       write_word(ADDR_CTRL, 8'h02);
-
       #(100 * CLK_PERIOD);
-
-      dump_dut_state();
       read_result();
+      check_result(result_data, nist_cbc_128_enc_expected0);
 
+      $display("Second block.");
+      tc_ctr = tc_ctr + 1;
+      write_block(nist_plaintext1);
+      write_word(ADDR_CONFIG, (8'h00 + (AES_128_BIT_KEY << 1) + AES_ENCIPHER));
+      write_word(ADDR_CTRL, 8'h02);
+      #(100 * CLK_PERIOD);
+      read_result();
+      check_result(result_data, nist_cbc_128_enc_expected1);
+
+      $display("Third block.");
+      tc_ctr = tc_ctr + 1;
+      write_block(nist_plaintext2);
+      write_word(ADDR_CONFIG, (8'h00 + (AES_128_BIT_KEY << 1) + AES_ENCIPHER));
+      write_word(ADDR_CTRL, 8'h02);
+      #(100 * CLK_PERIOD);
+      read_result();
+      check_result(result_data, nist_cbc_128_enc_expected2);
+
+      $display("Fourth block.");
+      tc_ctr = tc_ctr + 1;
+      write_block(nist_plaintext3);
+      write_word(ADDR_CONFIG, (8'h00 + (AES_128_BIT_KEY << 1) + AES_ENCIPHER));
+      write_word(ADDR_CTRL, 8'h02);
+      #(100 * CLK_PERIOD);
+      read_result();
+      check_result(result_data, nist_cbc_128_enc_expected3);
     end
   endtask // cbc_128_test
-
 
 
   //----------------------------------------------------------------
@@ -534,6 +535,44 @@ module tb_cbc();
       $display("--------------------");
 
 
+      init_key(nist_aes256_key, AES_256_BIT_KEY);
+
+      $display("First block.");
+      tc_ctr = tc_ctr + 1;
+      write_block(nist_plaintext0);
+      write_iv(nist_iv);
+      write_word(ADDR_CONFIG, (8'h00 + (AES_256_BIT_KEY << 1) + AES_ENCIPHER));
+      write_word(ADDR_CTRL, 8'h02);
+      #(100 * CLK_PERIOD);
+      read_result();
+      check_result(result_data, nist_cbc_256_enc_expected0);
+
+      $display("Second block.");
+      tc_ctr = tc_ctr + 1;
+      write_block(nist_plaintext1);
+      write_word(ADDR_CONFIG, (8'h00 + (AES_256_BIT_KEY << 1) + AES_ENCIPHER));
+      write_word(ADDR_CTRL, 8'h02);
+      #(100 * CLK_PERIOD);
+      read_result();
+      check_result(result_data, nist_cbc_256_enc_expected1);
+
+      $display("Third block.");
+      tc_ctr = tc_ctr + 1;
+      write_block(nist_plaintext2);
+      write_word(ADDR_CONFIG, (8'h00 + (AES_256_BIT_KEY << 1) + AES_ENCIPHER));
+      write_word(ADDR_CTRL, 8'h02);
+      #(100 * CLK_PERIOD);
+      read_result();
+      check_result(result_data, nist_cbc_256_enc_expected2);
+
+      $display("Fourth block.");
+      tc_ctr = tc_ctr + 1;
+      write_block(nist_plaintext3);
+      write_word(ADDR_CONFIG, (8'h00 + (AES_256_BIT_KEY << 1) + AES_ENCIPHER));
+      write_word(ADDR_CTRL, 8'h02);
+      #(100 * CLK_PERIOD);
+      read_result();
+      check_result(result_data, nist_cbc_256_enc_expected3);
     end
   endtask // cbc_256_test
 
