@@ -291,12 +291,12 @@ module tb_cbc();
   //
   // Write the given block to the dut.
   //----------------------------------------------------------------
-  task write_block(input [127 : 0] iv);
+  task write_iv(input [127 : 0] iv);
     begin
-      write_word(ADDR_IV0, block[127  :  96]);
-      write_word(ADDR_IV1, block[95   :  64]);
-      write_word(ADDR_IV2, block[63   :  32]);
-      write_word(ADDR_IV3, block[31   :   0]);
+      write_word(ADDR_IV0, iv[127  :  96]);
+      write_word(ADDR_IV1, iv[95   :  64]);
+      write_word(ADDR_IV2, iv[63   :  32]);
+      write_word(ADDR_IV3, iv[31   :   0]);
     end
   endtask // write_iv
 
@@ -402,6 +402,7 @@ module tb_cbc();
 
       init_key(key, key_length);
       write_block(block);
+      write_iv(iv);
       dump_dut_state();
 
       write_word(ADDR_CONFIG, (8'h00 + (key_length << 1)+ encdec));
@@ -441,6 +442,8 @@ module tb_cbc();
     reg [127 : 0] nist_plaintext2;
     reg [127 : 0] nist_plaintext3;
 
+    reg [127 : 0] nist_iv;
+
     reg [127 : 0] nist_cbc_128_enc_expected0;
     reg [127 : 0] nist_cbc_128_enc_expected1;
     reg [127 : 0] nist_cbc_128_enc_expected2;
@@ -460,72 +463,74 @@ module tb_cbc();
       nist_plaintext2 = 128'h30c81c46a35ce411e5fbc1191a0a52ef;
       nist_plaintext3 = 128'hf69f2445df4f9b17ad2b417be66c3710;
 
-      nist_cbc_128_enc_expected0 = 128'h3ad77bb40d7a3660a89ecaf32466ef97;
-      nist_cbc_128_enc_expected1 = 128'hf5d3d58503b9699de785895a96fdbaaf;
-      nist_cbc_128_enc_expected2 = 128'h43b1cd7f598ece23881b00e3ed030688;
-      nist_cbc_128_enc_expected3 = 128'h7b0c785e27e8ad3f8223207104725dd4;
+      nist_iv = 128'h000102030405060708090a0b0c0d0e0f;
 
-      nist_cbc_256_enc_expected0 = 128'hf3eed1bdb5d2a03c064b5a7e3db181f8;
-      nist_cbc_256_enc_expected1 = 128'h591ccb10d410ed26dc5ba74a31362870;
-      nist_cbc_256_enc_expected2 = 128'hb6ed21b99ca6f4f9f153e7b1beafed1d;
-      nist_cbc_256_enc_expected3 = 128'h23304b7a39f9f3ff067d8d8f9e24ecc7;
+      nist_cbc_128_enc_expected0 = 128'h7649abac8119b246cee98e9b12e9197d;
+      nist_cbc_128_enc_expected1 = 128'h5086cb9b507219ee95db113a917678b2;
+      nist_cbc_128_enc_expected2 = 128'h73bed6b8e3c1743b7116e69e22229516;
+      nist_cbc_128_enc_expected3 = 128'h3ff1caa1681fac09120eca307586e1a7;
+
+      nist_cbc_256_enc_expected0 = 128'hf58c4c04d6e5f1ba779eabfb5f7bfbd6;
+      nist_cbc_256_enc_expected1 = 128'h9cfc4e967edb808d679f777bc6702c7d;
+      nist_cbc_256_enc_expected2 = 128'h39f23369a9d9bacfa530e26304231461;
+      nist_cbc_256_enc_expected3 = 128'hb2eb05e2c39be9fcda6c19078c6a9d1b;
 
 
       $display("CBC 128 bit key tests");
       $display("---------------------");
       cbc_mode_single_block_test(8'h01, AES_ENCIPHER, nist_aes128_key, AES_128_BIT_KEY,
-                                 nist_plaintext0, nist_cbc_128_enc_expected0);
+                                 nist_plaintext0, nist_iv, nist_cbc_128_enc_expected0);
 
       cbc_mode_single_block_test(8'h02, AES_ENCIPHER, nist_aes128_key, AES_128_BIT_KEY,
-                                nist_plaintext1, nist_cbc_128_enc_expected1);
+                                nist_plaintext1, nist_iv, nist_cbc_128_enc_expected1);
 
       cbc_mode_single_block_test(8'h03, AES_ENCIPHER, nist_aes128_key, AES_128_BIT_KEY,
-                                 nist_plaintext2, nist_cbc_128_enc_expected2);
+                                 nist_plaintext2, nist_iv, nist_cbc_128_enc_expected2);
 
       cbc_mode_single_block_test(8'h04, AES_ENCIPHER, nist_aes128_key, AES_128_BIT_KEY,
-                                 nist_plaintext3, nist_cbc_128_enc_expected3);
+                                 nist_plaintext3, nist_iv, nist_cbc_128_enc_expected3);
 
 
       cbc_mode_single_block_test(8'h05, AES_DECIPHER, nist_aes128_key, AES_128_BIT_KEY,
-                                 nist_cbc_128_enc_expected0, nist_plaintext0);
+                                 nist_cbc_128_enc_expected0, nist_iv, nist_plaintext0);
 
       cbc_mode_single_block_test(8'h06, AES_DECIPHER, nist_aes128_key, AES_128_BIT_KEY,
-                                 nist_cbc_128_enc_expected1, nist_plaintext1);
+                                 nist_cbc_128_enc_expected1, nist_iv, nist_plaintext1);
 
       cbc_mode_single_block_test(8'h07, AES_DECIPHER, nist_aes128_key, AES_128_BIT_KEY,
-                                 nist_cbc_128_enc_expected2, nist_plaintext2);
+                                 nist_cbc_128_enc_expected2, nist_iv, nist_plaintext2);
 
       cbc_mode_single_block_test(8'h08, AES_DECIPHER, nist_aes128_key, AES_128_BIT_KEY,
-                                 nist_cbc_128_enc_expected3, nist_plaintext3);
+                                 nist_cbc_128_enc_expected3, nist_iv, nist_plaintext3);
 
 
       $display("");
       $display("CBC 256 bit key tests");
       $display("---------------------");
       cbc_mode_single_block_test(8'h10, AES_ENCIPHER, nist_aes256_key, AES_256_BIT_KEY,
-                                 nist_plaintext0, nist_cbc_256_enc_expected0);
+                                 nist_plaintext0, nist_iv, nist_cbc_256_enc_expected0);
 
       cbc_mode_single_block_test(8'h11, AES_ENCIPHER, nist_aes256_key, AES_256_BIT_KEY,
-                                 nist_plaintext1, nist_cbc_256_enc_expected1);
+                                 nist_plaintext1, nist_iv, nist_cbc_256_enc_expected1);
 
       cbc_mode_single_block_test(8'h12, AES_ENCIPHER, nist_aes256_key, AES_256_BIT_KEY,
-                                 nist_plaintext2, nist_cbc_256_enc_expected2);
+                                 nist_plaintext2, nist_iv, nist_cbc_256_enc_expected2);
 
       cbc_mode_single_block_test(8'h13, AES_ENCIPHER, nist_aes256_key, AES_256_BIT_KEY,
-                                 nist_plaintext3, nist_cbc_256_enc_expected3);
+                                 nist_plaintext3, nist_iv, nist_cbc_256_enc_expected3);
 
 
       cbc_mode_single_block_test(8'h14, AES_DECIPHER, nist_aes256_key, AES_256_BIT_KEY,
-                                 nist_cbc_256_enc_expected0, nist_plaintext0);
+                                 nist_cbc_256_enc_expected0, nist_iv, nist_plaintext0);
 
       cbc_mode_single_block_test(8'h15, AES_DECIPHER, nist_aes256_key, AES_256_BIT_KEY,
-                                 nist_cbc_256_enc_expected1, nist_plaintext1);
+                                 nist_cbc_256_enc_expected1, nist_iv, nist_plaintext1);
 
       cbc_mode_single_block_test(8'h16, AES_DECIPHER, nist_aes256_key, AES_256_BIT_KEY,
-                                 nist_cbc_256_enc_expected2, nist_plaintext2);
+                                 nist_cbc_256_enc_expected2, nist_iv, nist_plaintext2);
 
       cbc_mode_single_block_test(8'h17, AES_DECIPHER, nist_aes256_key, AES_256_BIT_KEY,
-                                 nist_cbc_256_enc_expected3, nist_plaintext3);
+                                 nist_cbc_256_enc_expected3, nist_iv, nist_plaintext3);
     end
   endtask // cbc_test
 
