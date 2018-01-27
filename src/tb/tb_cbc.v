@@ -180,6 +180,10 @@ module tb_cbc();
 
       $display("block: 0x%08x, 0x%08x, 0x%08x, 0x%08x",
                dut.block_reg[0], dut.block_reg[1], dut.block_reg[2], dut.block_reg[3]);
+      $display("iv:    0x%08x, 0x%08x, 0x%08x, 0x%08x",
+               dut.iv_reg[0], dut.iv_reg[1], dut.iv_reg[2], dut.iv_reg[3]);
+      $display("");
+      $display("cbc block: 0x%032x", dut.core_block);
       $display("");
 
     end
