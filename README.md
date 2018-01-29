@@ -19,6 +19,6 @@ Simulation gives correct results for 128 and 256 bit keys for all blocks.
 
 #### Altera Cyclone V
 
-ALMs:      2722
-Registers: 3208
-Max clock:   92 MHz
+- ALMs:      2722
+- Registers: 3208
+- 92 MHz
