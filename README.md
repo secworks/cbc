@@ -9,7 +9,16 @@ functionality.
 
 
 ## Implementation status
-Implementation done. Core works.
+Implementation done.
+Simulation gives correct results for 128 and 256 bit keys for all blocks.
 
-Simulation gives correct results for 128 and 256
-bit keys for all blocks. Need to add results from FPGA builds.
+
+## Implementation results
+
+### FPGA results
+
+#### Altera Cyclone V
+
+ALMs:      2722
+Registers: 3208
+Max clock:   92 MHz
