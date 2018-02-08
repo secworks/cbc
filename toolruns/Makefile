@@ -48,21 +48,25 @@ TOP_SRC=../src/rtl/cbc.v $(CORE_SRC)
 TB_TOP_SRC =../src/tb/tb_cbc.v
 
 CC=iverilog
-LINT=verilator
+CC_FLAGS= -Wall
+
+LINT= verilator
+LINTFLAGS = +1364-2001ext+ --lint-only  -Wall -Wno-fatal -Wno-DECLFILENAME
 
 
 all: top.sim
 
+
 top.sim: $(TB_TOP_SRC) $(TOP_SRC)
-	$(CC) -o top.sim $(TB_TOP_SRC) $(TOP_SRC)
+	$(CC) $(CC_FLAGS) -o top.sim $(TB_TOP_SRC) $(TOP_SRC)
 
 
 sim-top: top.sim
 	./top.sim
 
 
-lint:
-	verilator +1364-2001ext+ --lint-only -Wall $(TOP_SRC)
+lint: $(TOP_SRC)
+	$(LINT) $(LINTFLAGS) $(TOP_SRC)
 
 
 clean:
