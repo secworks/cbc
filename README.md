@@ -17,8 +17,24 @@ Simulation gives correct results for 128 and 256 bit keys for all blocks.
 
 ### FPGA results
 
-#### Altera Cyclone V
+#### Altera Cyclone-V
 
 - ALMs:      2722
 - Registers: 3208
 - 92 MHz
+
+
+#### Xilinx Artix-7
+
+- LUTs:      3712
+- Slices:    1950
+- Registers: 3119
+- 182 MHz
+
+
+#### Xilinx Spartan-6
+
+- LUTs:      3926
+- Slices:    1887
+- Registers: 3135
+- 106 MHz
