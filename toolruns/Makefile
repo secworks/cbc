@@ -51,7 +51,7 @@ CC=iverilog
 CC_FLAGS= -Wall
 
 LINT= verilator
-LINTFLAGS = +1364-2001ext+ --lint-only  -Wall -Wno-fatal -Wno-DECLFILENAME
+LINT_FLAGS = +1364-2001ext+ --lint-only  -Wall -Wno-fatal -Wno-DECLFILENAME
 
 
 all: top.sim
@@ -66,7 +66,7 @@ sim-top: top.sim
 
 
 lint: $(TOP_SRC)
-	$(LINT) $(LINTFLAGS) $(TOP_SRC)
+	$(LINT) $(LINT_FLAGS) $(TOP_SRC)
 
 
 clean:
